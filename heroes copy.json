@@ -20,10 +20,21 @@
         }
     ],
     "filters": [
-        "all",
-        "fire",
-        "water",
-        "wind",
-        "earth"
+        {
+            "element": "fire",
+            "descr": "Огонь"
+        },
+        {
+            "element": "water",
+            "descr": "Вода"
+        },
+        {
+            "element": "wind",
+            "descr": "Ветер"
+        },
+        {
+            "element": "earth",
+            "descr": "Земля"
+        }
     ]
 }
