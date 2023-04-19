@@ -17,13 +17,16 @@ const HeroesList = () => {
     const { request } = useHttp();
 
     useEffect(() => {
+        updateHero();
+        // eslint-disable-next-line
+    }, []);
+
+    const updateHero = () => {
         dispatch(heroesFetching());
         request("http://localhost:3001/heroes")
             .then(data => dispatch(heroesFetched(data)))
             .catch(() => dispatch(heroesFetchingError()))
-
-        // eslint-disable-next-line
-    }, []);
+    }
 
     if (heroesLoadingStatus === "loading") {
         return <Spinner />;
@@ -33,9 +36,8 @@ const HeroesList = () => {
 
     const deleteItem = (id) => {
         request(`http://localhost:3001/heroes/${id}`, "DELETE")
-            .then(() => request("http://localhost:3001/heroes")
-                .then(data => dispatch(heroesFetched(data)))
-                .catch(() => dispatch(heroesFetchingError())));
+            .then(() => updateHero())
+            .catch((e) => console.log(e));
 
     }
 

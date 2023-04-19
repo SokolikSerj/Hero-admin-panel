@@ -4,9 +4,9 @@ import * as Yup from 'yup';
 import { useHttp } from '../../hooks/http.hook';
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { v4 as uuidv4 } from 'uuid';
 
-import { heroesFetching, heroesFetched, heroesFetchingError } from '../../actions';
-import HeroesListItem from "../heroesListItem/HeroesListItem";
+import { filtersFetching, filtersFetched, filtersFetchingError, heroesFetching, heroesFetched, heroesFetchingError } from '../../actions';
 import Spinner from '../spinner/Spinner';
 
 // Задача для этого компонента:
@@ -20,18 +20,56 @@ import Spinner from '../spinner/Spinner';
 // данных из фильтров
 
 const HeroesAddForm = () => {
-    const { filters } = useSelector(state => state);
+    const { filters, filtersLoadingStatus } = useSelector(state => state);
     const dispatch = useDispatch();
     const { request } = useHttp();
 
     useEffect(() => {
+        dispatch(filtersFetching());
+        request("http://localhost:3001/filters")
+            .then(data => dispatch(filtersFetched(data)))
+            .catch(() => dispatch(filtersFetchingError()))
+
+        // eslint-disable-next-line
+    }, []);
+
+    const renderFilterList = (arr) => {
+        const options = arr.length > 0 ?
+            arr.map(({ element, descr }, i) => {
+                return <option key={i} value={element}>{descr}</option>
+            }) : null;
+
+        return (
+            <Field
+                as="select"
+                className="form-select"
+                id="element"
+                name="element"
+            >
+                {filtersLoadingStatus === 'error' ? <option value="">Элементы на загружены</option> : <option value="">Я владею элементом...</option>}
+                {options}
+            </Field>
+        )
+    }
+
+    const updateHero = () => {
         dispatch(heroesFetching());
         request("http://localhost:3001/heroes")
             .then(data => dispatch(heroesFetched(data)))
             .catch(() => dispatch(heroesFetchingError()))
+    }
 
-        // eslint-disable-next-line
-    }, []);
+    const addHero = ({ name, text, element }) => {
+        const hero = {
+            "id": uuidv4(),
+            "name": name,
+            "description": text,
+            "element": element
+        }
+        request("http://localhost:3001/heroes", "POST", JSON.stringify(hero))
+            .then(() => updateHero())
+            .catch((e) => console.log(e))
+    }
 
     return (
         <Formik
@@ -49,14 +87,13 @@ const HeroesAddForm = () => {
                     .required('Это поле обязательно!')
             })}
             onSubmit={values => {
-                console.log(values);
+                addHero(values);
             }}
         >
             <Form className="border p-4 shadow-lg rounded">
                 <div className="mb-3">
                     <label htmlFor="name" className="form-label fs-4">Имя нового героя</label>
                     <Field
-                        required
                         type="text"
                         name="name"
                         className="form-control"
@@ -68,7 +105,6 @@ const HeroesAddForm = () => {
                 <div className="mb-3">
                     <label htmlFor="text" className="form-label fs-4">Описание</label>
                     <Field
-                        required
                         as="textarea"
                         name="text"
                         className="form-control"
@@ -80,19 +116,9 @@ const HeroesAddForm = () => {
 
                 <div className="mb-3">
                     <label htmlFor="element" className="form-label">Выбрать элемент героя</label>
-                    <Field
-                        required
-                        as="select"
-                        className="form-select"
-                        id="element"
-                        name="element">
-                        <option >Я владею элементом...</option>
-                        <option value="fire">Огонь</option>
-                        <option value="water">Вода</option>
-                        <option value="wind">Ветер</option>
-                        <option value="earth">Земля</option>
-                    </Field>
+                    {renderFilterList(filters)}
                     <ErrorMessage component="div" className="error" name="element" />
+                    {filtersLoadingStatus === 'loading' ? <Spinner /> : null}
                 </div>
 
                 <button type="submit" className="btn btn-primary">Создать</button>
