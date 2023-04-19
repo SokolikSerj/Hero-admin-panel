@@ -1,39 +1,18 @@
-import { Formik, Field, Form, ErrorMessage } from 'formik';
-import * as Yup from 'yup';
-
-import { useHttp } from '../../hooks/http.hook';
-import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { v4 as uuidv4 } from 'uuid';
 
-import { filtersFetching, filtersFetched, filtersFetchingError, heroesFetching, heroesFetched, heroesFetchingError } from '../../actions';
-import Spinner from '../spinner/Spinner';
+import { useHttp } from '../../hooks/http.hook';
+import { Formik, Field, Form, ErrorMessage } from 'formik';
+import * as Yup from 'yup';
 
-// Задача для этого компонента:
-// Реализовать создание нового героя с введенными данными. Он должен попадать
-// в общее состояние и отображаться в списке + фильтроваться
-// Уникальный идентификатор персонажа можно сгенерировать через uiid
-// Усложненная задача:
-// Персонаж создается и в файле json при помощи метода POST
-// Дополнительно:
-// Элементы <option></option> желательно сформировать на базе
-// данных из фильтров
+import { heroesFetching, heroesFetched, heroesFetchingError } from '../../actions';
 
 const HeroesAddForm = () => {
     const { filters, filtersLoadingStatus } = useSelector(state => state);
     const dispatch = useDispatch();
     const { request } = useHttp();
 
-    useEffect(() => {
-        dispatch(filtersFetching());
-        request("http://localhost:3001/filters")
-            .then(data => dispatch(filtersFetched(data)))
-            .catch(() => dispatch(filtersFetchingError()))
-
-        // eslint-disable-next-line
-    }, []);
-
-    const renderFilterList = (arr) => {
+    const renderFilterOptions = (arr) => {
         const options = arr.length > 0 ?
             arr.map(({ element, descr }, i) => {
                 return <option key={i} value={element}>{descr}</option>
@@ -46,7 +25,7 @@ const HeroesAddForm = () => {
                 id="element"
                 name="element"
             >
-                {filtersLoadingStatus === 'error' ? <option value="">Элементы на загружены</option> : <option value="">Я владею элементом...</option>}
+                {filtersLoadingStatus === 'error' ? <option value=""> Элементы не загружены</option> : filtersLoadingStatus === 'loading' ? <option value="">Элементы загружаются...</option> : <option value="">Я владею элементом...</option>}
                 {options}
             </Field>
         )
@@ -116,9 +95,8 @@ const HeroesAddForm = () => {
 
                 <div className="mb-3">
                     <label htmlFor="element" className="form-label">Выбрать элемент героя</label>
-                    {renderFilterList(filters)}
+                    {renderFilterOptions(filters)}
                     <ErrorMessage component="div" className="error" name="element" />
-                    {filtersLoadingStatus === 'loading' ? <Spinner /> : null}
                 </div>
 
                 <button type="submit" className="btn btn-primary">Создать</button>

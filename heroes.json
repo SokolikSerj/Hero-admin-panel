@@ -19,34 +19,50 @@
       "element": "water"
     },
     {
-      "id": "624bb4cc-3d49-49df-913c-6ea26c9ba25f",
-      "name": "sdsds",
-      "description": "dsdsds",
-      "element": "wind"
+      "id": "1c2712d4-7172-4648-897f-8fb594374453",
+      "name": "erer",
+      "description": "errer",
+      "element": "earth"
     },
     {
-      "id": "ffe8d3dd-e86b-4895-9ef2-4d60b4b6a6bd",
-      "name": "sdsds",
-      "description": "dsdsds",
-      "element": "earth"
+      "id": "e0eb0407-eb5c-4867-9737-955d8404feb3",
+      "name": "erersdsds",
+      "description": "errerdsds",
+      "element": "water"
+    },
+    {
+      "id": "fa0cd163-2da3-47b0-b354-f2cf5c241b0d",
+      "name": "2121122",
+      "description": "ggdfgdfg",
+      "element": "fire"
+    },
+    {
+      "id": "43ce46b2-0c6b-4050-b12f-3c8a61b74245",
+      "name": "2121122",
+      "description": "ggdfgdfg",
+      "element": "wind"
     }
   ],
   "filters": [
     {
       "element": "fire",
-      "descr": "Огонь"
+      "descr": "Огонь",
+      "style": "danger"
     },
     {
       "element": "water",
-      "descr": "Вода"
+      "descr": "Вода",
+      "style": "primary"
     },
     {
       "element": "wind",
-      "descr": "Ветер"
+      "descr": "Ветер",
+      "style": "success"
     },
     {
       "element": "earth",
-      "descr": "Земля"
+      "descr": "Земля",
+      "style": "secondary"
     }
   ]
 }

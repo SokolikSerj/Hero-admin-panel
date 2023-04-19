@@ -17,12 +17,12 @@ const HeroesList = () => {
     const { request } = useHttp();
 
     useEffect(() => {
+        dispatch(heroesFetching());
         updateHero();
         // eslint-disable-next-line
     }, []);
 
     const updateHero = () => {
-        dispatch(heroesFetching());
         request("http://localhost:3001/heroes")
             .then(data => dispatch(heroesFetched(data)))
             .catch(() => dispatch(heroesFetchingError()))
