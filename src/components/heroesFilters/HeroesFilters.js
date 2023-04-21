@@ -67,12 +67,12 @@ const HeroesFilters = () => {
                     className="btn btn-outline-dark active"
                     onClick={() => {
                         focusOnItem(0);
-                        heroesAll();
+                        dispatch(heroesAll());
                     }}
                     onKeyDown={(e) => {
                         if (e.key === ' ' || e.key === "Enter") {
                             focusOnItem(0);
-                            heroesAll();
+                            dispatch(heroesAll());
                         }
                     }}
                 >

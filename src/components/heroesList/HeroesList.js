@@ -51,8 +51,6 @@ const HeroesList = () => {
         })
     }
 
-    console.log(heroesIsFiltring);
-
     const elements = heroesIsFiltring ? renderHeroesList(heroesFilter) : renderHeroesList(heroes);
     return (
         <ul>
