@@ -35,3 +35,16 @@ export const filtersFetchingError = () => {
         type: 'FILTERS_FETCHING_ERROR'
     }
 }
+
+export const heroesFiltring = (filter) => {
+    return {
+        type: 'HEROES_FILTRING',
+        payload: filter
+    }
+}
+
+export const heroesAll = () => {
+    return {
+        type: 'HEROES_ALL'
+    }
+}
