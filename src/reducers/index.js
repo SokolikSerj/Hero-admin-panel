@@ -3,8 +3,8 @@ const initialState = {
     heroesLoadingStatus: 'idle',
     filters: [],
     filtersLoadingStatus: 'loading',
-    heroesFilter: [],
-    heroesIsFiltring: false
+    activeFilter: 'all',
+    filteredHeroes: []
 }
 
 const reducer = (state = initialState, action) => {
@@ -18,12 +18,24 @@ const reducer = (state = initialState, action) => {
             return {
                 ...state,
                 heroes: action.payload,
+                filteredHeroes: state.activeFilter === 'all' ?
+                    action.payload :
+                    action.payload.filter(item => item.element === state.activeFilter),
                 heroesLoadingStatus: 'idle'
             }
         case 'HEROES_FETCHING_ERROR':
             return {
                 ...state,
                 heroesLoadingStatus: 'error'
+            }
+        case 'HERO_ADDED':
+            let newCreatedHeroList = [...state.heroes, action.payload];
+            return {
+                ...state,
+                heroes: newCreatedHeroList,
+                filteredHeroes: state.activeFilter === 'all' ?
+                    newCreatedHeroList :
+                    newCreatedHeroList.filter(item => item.element === state.activeFilter)
             }
         case 'FILTERS_FETCHING':
             return {
@@ -41,16 +53,13 @@ const reducer = (state = initialState, action) => {
                 ...state,
                 filtersLoadingStatus: 'error'
             }
-        case 'HEROES_FILTRING':
+        case 'FILTER_CHANGED':
             return {
                 ...state,
-                heroesIsFiltring: true,
-                heroesFilter: state.heroes.filter(({ element }) => element === action.payload)
-            }
-        case 'HEROES_ALL':
-            return {
-                ...state,
-                heroesIsFiltring: false
+                activeFilter: action.payload,
+                filteredHeroes: action.payload === 'all' ?
+                    state.heroes :
+                    state.heroes.filter(item => item.element === state.activeFilter)
             }
         default: return state
     }

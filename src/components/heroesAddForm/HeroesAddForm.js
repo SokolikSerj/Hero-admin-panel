@@ -5,7 +5,7 @@ import { useHttp } from '../../hooks/http.hook';
 import { Formik, Field, Form, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 
-import { heroesFetching, heroesFetched, heroesFetchingError } from '../../actions';
+import { heroAdded } from '../../actions';
 
 const HeroesAddForm = () => {
     const { filters, filtersLoadingStatus } = useSelector(state => state);
@@ -31,13 +31,6 @@ const HeroesAddForm = () => {
         )
     }
 
-    const updateHero = () => {
-        dispatch(heroesFetching());
-        request("http://localhost:3001/heroes")
-            .then(data => dispatch(heroesFetched(data)))
-            .catch(() => dispatch(heroesFetchingError()))
-    }
-
     const addHero = ({ name, text, element }) => {
         const hero = {
             "id": uuidv4(),
@@ -46,7 +39,8 @@ const HeroesAddForm = () => {
             "element": element
         }
         request("http://localhost:3001/heroes", "POST", JSON.stringify(hero))
-            .then(() => updateHero())
+            .then(() => dispatch(heroAdded(hero)))
+            .then((data) => console.log(data))
             .catch((e) => console.log(e))
     }
 

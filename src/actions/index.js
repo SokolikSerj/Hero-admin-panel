@@ -36,15 +36,16 @@ export const filtersFetchingError = () => {
     }
 }
 
-export const heroesFiltring = (filter) => {
+export const heroAdded = (hero) => {
     return {
-        type: 'HEROES_FILTRING',
-        payload: filter
+        type: 'HERO_ADDED',
+        payload: hero
     }
 }
 
-export const heroesAll = () => {
+export const changeFilter = (elem) => {
     return {
-        type: 'HEROES_ALL'
+        type: 'FILTER_CHANGED',
+        payload: elem
     }
 }

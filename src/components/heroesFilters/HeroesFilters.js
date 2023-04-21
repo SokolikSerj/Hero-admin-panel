@@ -2,7 +2,7 @@ import { useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { useHttp } from '../../hooks/http.hook';
-import { filtersFetching, filtersFetched, filtersFetchingError, heroesFiltring, heroesAll } from '../../actions';
+import { filtersFetching, filtersFetched, filtersFetchingError } from '../../actions';
 
 // Задача для этого компонента:
 // Фильтры должны формироваться на основании загруженных данных
@@ -41,44 +41,24 @@ const HeroesFilters = () => {
             return <div>Фильтров пока нет...</div>
         }
 
-        const elements = arr.map(({ element, descr, style }, i) => {
-            return <button
-                ref={el => buttonRefs.current[i + 1] = el}
-                key={i + 1}
-                className={`btn btn-${style}`}
-                onClick={() => {
-                    focusOnItem(i + 1);
-                    dispatch(heroesFiltring(element));
-                }}
-                onKeyDown={(e) => {
-                    if (e.key === ' ' || e.key === "Enter") {
-                        focusOnItem(i + 1);
-                        dispatch(heroesFiltring(element));
-                    }
-                }}
-            >{descr}</button>
-        })
 
         return (
             <>
-                <button
-                    key={0}
-                    ref={el => buttonRefs.current[0] = el}
-                    className="btn btn-outline-dark active"
-                    onClick={() => {
-                        focusOnItem(0);
-                        dispatch(heroesAll());
-                    }}
-                    onKeyDown={(e) => {
-                        if (e.key === ' ' || e.key === "Enter") {
-                            focusOnItem(0);
-                            dispatch(heroesAll());
-                        }
-                    }}
-                >
-                    Все
-                </button>
-                {elements}
+                {arr.map(({ element, descr, style }, i) => {
+                    return <button
+                        ref={el => buttonRefs.current[i] = el}
+                        key={i}
+                        className={`btn btn-${style}`}
+                        onClick={() => {
+                            focusOnItem(i);
+                        }}
+                        onKeyDown={(e) => {
+                            if (e.key === ' ' || e.key === "Enter") {
+                                focusOnItem(i);
+                            }
+                        }}
+                    >{descr}</button>
+                })}
             </>
         )
     }

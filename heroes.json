@@ -27,6 +27,11 @@
   ],
   "filters": [
     {
+      "element": "all",
+      "descr": "Все",
+      "style": "doutline-dark"
+    },
+    {
       "element": "fire",
       "descr": "Огонь",
       "style": "danger"
