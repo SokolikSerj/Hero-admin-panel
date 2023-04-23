@@ -43,6 +43,13 @@ export const heroAdded = (hero) => {
     }
 }
 
+export const heroDeleted = (id) => {
+    return {
+        type: 'HERO_DELETED',
+        payload: id
+    }
+}
+
 export const changeFilter = (elem) => {
     return {
         type: 'FILTER_CHANGED',

@@ -37,6 +37,15 @@ const reducer = (state = initialState, action) => {
                     newCreatedHeroList :
                     newCreatedHeroList.filter(item => item.element === state.activeFilter)
             }
+        case 'HERO_DELETED':
+            let newDeletedHeroList = state.heroes.filter(item => item.id !== action.payload);
+            return {
+                ...state,
+                heroes: newDeletedHeroList,
+                filteredHeroes: state.activeFilter === 'all' ?
+                    newDeletedHeroList :
+                    newDeletedHeroList.filter(item => item.element === state.activeFilter)
+            }
         case 'FILTERS_FETCHING':
             return {
                 ...state,
@@ -59,7 +68,7 @@ const reducer = (state = initialState, action) => {
                 activeFilter: action.payload,
                 filteredHeroes: action.payload === 'all' ?
                     state.heroes :
-                    state.heroes.filter(item => item.element === state.activeFilter)
+                    state.heroes.filter(item => item.element === action.payload)
             }
         default: return state
     }

@@ -2,14 +2,7 @@ import { useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { useHttp } from '../../hooks/http.hook';
-import { filtersFetching, filtersFetched, filtersFetchingError } from '../../actions';
-
-// Задача для этого компонента:
-// Фильтры должны формироваться на основании загруженных данных
-// Фильтры должны отображать только нужных героев при выборе
-// Активный фильтр имеет класс active
-// Изменять json-файл для удобства МОЖНО!
-// Представьте, что вы попросили бэкенд-разработчика об этом
+import { filtersFetching, filtersFetched, filtersFetchingError, changeFilter } from '../../actions';
 
 const HeroesFilters = () => {
     const { filters, filtersLoadingStatus } = useSelector(state => state);
@@ -51,10 +44,13 @@ const HeroesFilters = () => {
                         className={`btn btn-${style}`}
                         onClick={() => {
                             focusOnItem(i);
+                            console.log(element);
+                            dispatch(changeFilter(element));
                         }}
                         onKeyDown={(e) => {
                             if (e.key === ' ' || e.key === "Enter") {
                                 focusOnItem(i);
+                                dispatch(changeFilter(element));
                             }
                         }}
                     >{descr}</button>

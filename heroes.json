@@ -29,7 +29,7 @@
     {
       "element": "all",
       "descr": "Все",
-      "style": "doutline-dark"
+      "style": "outline-dark active"
     },
     {
       "element": "fire",

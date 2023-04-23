@@ -15,7 +15,7 @@ const HeroesAddForm = () => {
     const renderFilterOptions = (arr) => {
         const options = arr.length > 0 ?
             arr.map(({ element, descr }, i) => {
-                return <option key={i} value={element}>{descr}</option>
+                return element !== 'all' ? <option key={i} value={element}>{descr}</option> : null
             }) : null;
 
         return (
@@ -40,7 +40,7 @@ const HeroesAddForm = () => {
         }
         request("http://localhost:3001/heroes", "POST", JSON.stringify(hero))
             .then(() => dispatch(heroAdded(hero)))
-            .then((data) => console.log(data))
+            .then((data) => console.log(`Hero added`, data.payload))
             .catch((e) => console.log(e))
     }
 
