@@ -39,7 +39,7 @@ const HeroesAddForm = () => {
             "element": element
         }
         request("http://localhost:3001/heroes", "POST", JSON.stringify(hero))
-            .then(() => dispatch(heroAdded(hero)))
+            .then(dispatch(heroAdded(hero)))
             .then((data) => console.log(`Hero added`, data.payload))
             .catch((e) => console.log(e))
     }
@@ -59,8 +59,15 @@ const HeroesAddForm = () => {
                 element: Yup.string()
                     .required('Это поле обязательно!')
             })}
-            onSubmit={values => {
+            onSubmit={(values, actions) => {
                 addHero(values);
+                actions.resetForm({
+                    values: {
+                        name: '',
+                        text: '',
+                        element: ''
+                    },
+                });
             }}
         >
             <Form className="border p-4 shadow-lg rounded">

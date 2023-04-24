@@ -23,6 +23,12 @@
       "name": "Иван Дулин",
       "description": "Редкий пляшущий дебил",
       "element": "earth"
+    },
+    {
+      "id": "e5058db9-574f-42fe-8e63-29063d8034a9",
+      "name": "Петр Бубков",
+      "description": "Умею тупить по тупому",
+      "element": "wind"
     }
   ],
   "filters": [

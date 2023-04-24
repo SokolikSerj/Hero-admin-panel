@@ -15,7 +15,10 @@ import './heroesList.scss';
 // Удаление идет и с json файла при помощи метода DELETE
 
 const HeroesList = () => {
-    const { heroesLoadingStatus, filteredHeroes } = useSelector(state => state);
+    const filteredHeroes = useSelector(state => {
+        return state.activeFilter === 'all' ? state.heroes : state.heroes.filter(item => item.element === state.activeFilter);
+    })
+    const heroesLoadingStatus = useSelector(state => state.heroesLoadingStatus);
     const dispatch = useDispatch();
     const { request } = useHttp();
 
@@ -29,11 +32,11 @@ const HeroesList = () => {
 
     const deleteItem = useCallback((id) => {
         request(`http://localhost:3001/heroes/${id}`, "DELETE")
-            .then(() => console.log(`Deleted a hero ${id}`))
-            .then(() => dispatch(heroDeleted(id)))
+            .then(console.log(`Deleted a hero ${id}`))
+            .then(dispatch(heroDeleted(id)))
             .catch((e) => console.log(e));
         // eslint-disable-next-line
-    }, [])
+    }, [request])
 
     if (heroesLoadingStatus === "loading") {
         return <Spinner />;
