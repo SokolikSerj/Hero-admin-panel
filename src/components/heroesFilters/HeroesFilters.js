@@ -1,14 +1,13 @@
-import { useEffect, useRef } from 'react';
+import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { useHttp } from '../../hooks/http.hook';
 import { filtersFetching, filtersFetched, filtersFetchingError, changeFilter } from '../../actions';
 
 const HeroesFilters = () => {
-    const { filters, filtersLoadingStatus } = useSelector(state => state);
+    const { filters, filtersLoadingStatus, activeFilter } = useSelector(state => state.filters);
     const dispatch = useDispatch();
     const { request } = useHttp();
-    const buttonRefs = useRef([]);
 
     useEffect(() => {
         dispatch(filtersFetching());
@@ -18,13 +17,6 @@ const HeroesFilters = () => {
 
         // eslint-disable-next-line
     }, []);
-
-    const focusOnItem = (id) => {
-        buttonRefs.current.forEach(item => item.classList.remove('active'));
-        buttonRefs.current[id].classList.add('active');
-        buttonRefs.current[id].focus();
-    }
-
     const renderFilterButtons = (arr) => {
         if (filtersLoadingStatus === 'error') {
             return <div className='text-danger'>Ошибка загрузки фильтров</div>
@@ -34,22 +26,18 @@ const HeroesFilters = () => {
             return <div>Фильтров пока нет...</div>
         }
 
-
         return (
             <>
                 {arr.map(({ element, descr, style }, i) => {
+                    const activeStyle = activeFilter ===  element ? 'active' : '';
                     return <button
-                        ref={el => buttonRefs.current[i] = el}
                         key={i}
-                        className={`btn btn-${style}`}
+                        className={`btn btn-${style} ${activeStyle}`}
                         onClick={() => {
-                            focusOnItem(i);
-                            console.log(element);
                             dispatch(changeFilter(element));
                         }}
                         onKeyDown={(e) => {
                             if (e.key === ' ' || e.key === "Enter") {
-                                focusOnItem(i);
                                 dispatch(changeFilter(element));
                             }
                         }}

@@ -8,7 +8,7 @@ import * as Yup from 'yup';
 import { heroAdded } from '../../actions';
 
 const HeroesAddForm = () => {
-    const { filters, filtersLoadingStatus } = useSelector(state => state);
+    const { filters, filtersLoadingStatus } = useSelector(state => state.filters);
     const dispatch = useDispatch();
     const { request } = useHttp();
 

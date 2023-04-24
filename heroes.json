@@ -35,7 +35,7 @@
     {
       "element": "all",
       "descr": "Все",
-      "style": "outline-dark active"
+      "style": "outline-dark"
     },
     {
       "element": "fire",
