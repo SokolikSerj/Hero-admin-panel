@@ -5,7 +5,7 @@ import { useHttp } from '../../hooks/http.hook';
 import { Formik, Field, Form, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 
-import { heroAdded } from '../../actions';
+import { heroAdded } from '../heroesList/heroesSlice';
 
 const HeroesAddForm = () => {
     const { filters, filtersLoadingStatus } = useSelector(state => state.filters);
