@@ -1,10 +1,16 @@
-import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk, createEntityAdapter, createSelector } from "@reduxjs/toolkit";
 import { useHttp } from "../../hooks/http.hook";
 
-const initialState = {
-    heroes: [],
+const heroesAdapter = createEntityAdapter();
+
+// const initialState = {
+//     heroes: [],
+//     heroesLoadingStatus: 'idle'
+// }
+
+const initialState = heroesAdapter.getInitialState({
     heroesLoadingStatus: 'idle'
-}
+});
 
 export const fetchHeroes = createAsyncThunk(
     'heroes/fetchHeroes',
@@ -19,10 +25,10 @@ const heroesSlice = createSlice({
     initialState,
     reducers: {
         heroAdded: (state, action) => {
-            state.heroes.push(action.payload);
+            heroesAdapter.addOne(state, action.payload);
         },
         heroDeleted: (state, action) => {
-            state.heroes = state.heroes.filter(item => item.id !== action.payload);
+            heroesAdapter.removeOne(state, action.payload);
         }
     },
     extraReducers: (builder) => {
@@ -30,7 +36,7 @@ const heroesSlice = createSlice({
             .addCase(fetchHeroes.pending, state => {state.heroesLoadingStatus = 'loading'})
             .addCase(fetchHeroes.fulfilled, (state, action) => {
                 state.heroesLoadingStatus = 'idle';
-                state.heroes = action.payload;
+                heroesAdapter.setAll(state, action.payload);
             })
             .addCase(fetchHeroes.rejected, state => {state.heroesLoadingStatus = 'error'})
             .addDefaultCase(() => {})
@@ -40,6 +46,18 @@ const heroesSlice = createSlice({
 const {actions, reducer} = heroesSlice;
 
 export default reducer;
+
+const {selectAll} = heroesAdapter.getSelectors(state => state.heroes);
+
+export const filtredHeroesSelector = createSelector(
+    (state) => state.filters.activeFilter,
+    // (state) => state.heroes.heroes,
+    selectAll,
+    (filter, heroes) => {
+        return filter === 'all' ? heroes : heroes.filter(item => item.element === filter);
+    }
+);
+
 export const {
     heroesFetching,
     heroesFetched,
