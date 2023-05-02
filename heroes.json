@@ -33,26 +33,31 @@
   ],
   "filters": [
     {
+      "id": "all",
       "element": "all",
       "descr": "Все",
       "style": "outline-dark"
     },
     {
+      "id": "fire",
       "element": "fire",
       "descr": "Огонь",
       "style": "danger"
     },
     {
+      "id": "water",
       "element": "water",
       "descr": "Вода",
       "style": "primary"
     },
     {
+      "id": "wind",
       "element": "wind",
       "descr": "Ветер",
       "style": "success"
     },
     {
+      "id": "earth",
       "element": "earth",
       "descr": "Земля",
       "style": "secondary"
