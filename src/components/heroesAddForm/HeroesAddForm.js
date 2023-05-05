@@ -1,19 +1,18 @@
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { v4 as uuidv4 } from 'uuid';
 import store from '../../store';
 
-import { useHttp } from '../../hooks/http.hook';
+import { useCreateHeroMutation } from '../../api/apiSlice';
 import { Formik, Field, Form, ErrorMessage } from 'formik';
 import * as Yup from 'yup';
 
-import { heroAdded } from '../heroesList/heroesSlice';
 import { selectAll } from '../heroesFilters/filtersSlice';
 
 const HeroesAddForm = () => {
     const { filtersLoadingStatus } = useSelector(state => state.filters);
-    const filters = selectAll(store.getState()); 
-    const dispatch = useDispatch();
-    const { request } = useHttp();
+    const filters = selectAll(store.getState());
+
+    const [createHero, { isLoading }] = useCreateHeroMutation();
 
     const renderFilterOptions = (arr) => {
         const options = arr.length > 0 ?
@@ -41,10 +40,7 @@ const HeroesAddForm = () => {
             "description": text,
             "element": element
         }
-        request("http://localhost:3001/heroes", "POST", JSON.stringify(hero))
-            .then(dispatch(heroAdded(hero)))
-            .then((data) => console.log(`Hero added`, data.payload))
-            .catch((e) => console.log(e))
+        createHero(hero).unwrap();
     }
 
     return (
@@ -103,7 +99,13 @@ const HeroesAddForm = () => {
                     <ErrorMessage component="div" className="error" name="element" />
                 </div>
 
-                <button type="submit" className="btn btn-primary">Создать</button>
+                <button
+                    type="submit"
+                    className="btn btn-primary"
+                    disabled={isLoading}
+                >
+                    Создать
+                </button>
             </Form>
         </Formik>
     )
